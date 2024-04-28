@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -15,6 +16,7 @@ public class ExecutorServiceDemo {
     testCustomThreadPoolExecutor();
     testSingleThreadExecutor();
     testFixedPoolExecutor();
+    testFixedPoolExecutorWithFactory();
     testCachedPoolExecutor();
 
     System.out.println(STR."Finished process at \{new Date()}");
@@ -51,6 +53,18 @@ public class ExecutorServiceDemo {
 
     System.out.println(STR."Finished Fixed Pool Thread Executor at \{new Date()}\n");
   }
+
+  private static void testFixedPoolExecutorWithFactory() {
+    System.out.println(STR."Started Fixed Pool Thread Executor with Platform Thread Facotry at \{new Date()}");
+
+    ThreadFactory factory = Thread.ofPlatform().name("MyThread", 1).factory();
+    try (ExecutorService service = Executors.newFixedThreadPool(2, factory)) {
+      executeTasks(service);
+    }
+
+    System.out.println(STR."Finished Fixed Pool Thread Executor with Platform Thread Factory at \{new Date()}\n");
+  }
+
 
   private static void testCachedPoolExecutor() {
     System.out.println(STR."Started Cached Pool Thread Executor at \{new Date()}");
