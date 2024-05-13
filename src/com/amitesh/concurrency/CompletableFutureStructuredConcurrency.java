@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.stream.IntStream;
 
-public class CompletableFutureVirtualThreads {
+public class CompletableFutureStructuredConcurrency {
 
   private static final int NUM_USERS = 2;
 
@@ -17,7 +17,7 @@ public class CompletableFutureVirtualThreads {
 
       IntStream.range(0, NUM_USERS).forEach(j ->
           executor.execute(
-              () -> new CompletableFutureVirtualThreads().concurrentCallCompletableFuture(j))
+              () -> new CompletableFutureStructuredConcurrency().concurrentCallCompletableFuture(j))
       );
     }
   }
