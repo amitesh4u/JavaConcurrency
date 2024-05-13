@@ -1,7 +1,5 @@
 package com.amitesh.concurrency;
 
-import java.io.InputStream;
-import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,14 +37,16 @@ public class CompletableFutureStructuredConcurrency {
           })
           .join(); // The Join (or get) will block the Virtual Thread but release the underlying Platform thread
 
-      System.out.println(STR."Final concatenated result of all calls is \{output}");
+      System.out.println(
+          STR."Final concatenated result of all calls for User \{id} is \n \{output}");
     }
   }
 
   private String dbCall() {
     try {
-      NetworkCaller caller = new NetworkCaller("Database Call");
-      return caller.makeCall(2);
+      String databaseCall = "Database Call";
+      NetworkCaller caller = new NetworkCaller(databaseCall);
+      return databaseCall + caller.makeCall(2);
     } catch (Exception e) {
       return null;
     }
@@ -54,45 +54,22 @@ public class CompletableFutureStructuredConcurrency {
 
   private String restCall() {
     try {
-      NetworkCaller caller = new NetworkCaller("REST API Call");
-      return caller.makeCall(5);
+      String restApiCall = "REST API Call";
+      NetworkCaller caller = new NetworkCaller(restApiCall);
+      return restApiCall + caller.makeCall(5);
     } catch (Exception e) {
       return null;
     }
-
   }
 
   private String externalCall() {
     try {
-      NetworkCaller caller = new NetworkCaller("External Call");
-      return caller.makeCall(4);
+      String externalCall = "External Call";
+      NetworkCaller caller = new NetworkCaller(externalCall);
+      return externalCall + caller.makeCall(4);
     } catch (Exception e) {
       return null;
     }
   }
 }
 
-class NetworkCaller {
-
-  private final String callName;
-
-  public NetworkCaller(String callName) {
-    this.callName = callName;
-  }
-
-  public String makeCall(int secs) throws Exception {
-
-    System.out.println(STR."Beginning \{callName} with Thread \{Thread.currentThread()}");
-
-    try {
-      URI uri = new URI(STR."http://httpbin.org/delay/\{secs}");
-      try (InputStream stream = uri.toURL().openStream()) {
-        return new String(stream.readAllBytes());
-      }
-    } finally {
-      System.out.println(STR."Finished \{callName} with Thread \{Thread.currentThread()}");
-    }
-
-  }
-
-}
